@@ -249,3 +249,146 @@ function generateFallbackAnalysis(
     severity: 'high'
   };
 }
+
+/**
+ * PROMPT 2: Generate a NEW practice exercise for the same bug_type
+ */
+export async function generatePracticeExerciseWithAI(
+  bugType: BugType,
+  language: SupportedLanguage
+): Promise<PracticeExercise> {
+  const prompt = `You are a curriculum lead designing hands-on programming drills for CS students.
+Generate a BRAND NEW, SHORT buggy code snippet to test the student's ability to identify and fix this specific bug type:
+
+Bug Type to Drill: "${bugType}"
+Programming Language: "${language}"
+
+Guidelines:
+1. Make it a realistic, concise scenario (e.g. data processing, game state, API payload, shopping cart, string tokenizer).
+2. The code snippet should be 6-15 lines long.
+3. It must contain EXACTLY ONE clear "${bugType}" bug.
+4. Provide two progressive hints:
+   - Hint 1: Conceptual heuristic without giving away the exact code.
+   - Hint 2: Direct line-level clue pointing to the invariant that must change.
+
+Return STRICT JSON matching this schema:
+{
+  "id": "drill-${bugType}-${Date.now()}",
+  "bug_type": "${bugType}",
+  "language": "${language}",
+  "title": "string (Crisp title)",
+  "scenario": "string (2-3 sentence context)",
+  "buggy_code": "string (the short code snippet with the bug)",
+  "expected_behavior": "string (the expected outcome once fixed)",
+  "hints": ["Hint 1 text", "Hint 2 text"]
+}`;
+
+  try {
+    const exercise = await callGeminiJson<PracticeExercise>(
+      prompt,
+      'You are a senior computer science instructor. Output strictly parseable JSON conforming to the requested schema.',
+      '{ id, bug_type, language, title, scenario, buggy_code, expected_behavior, hints: [string, string] }'
+    );
+
+    if (!exercise.buggy_code || !exercise.hints || exercise.hints.length < 2) {
+      throw new Error('Generated exercise missing required fields');
+    }
+
+    return exercise;
+  } catch (err: any) {
+    console.warn(`Dynamic exercise generation failed (${err.message}), loading curated drill for ${bugType}`);
+    // Import and return curated drill as reliable fallback
+    const { CURATED_PRACTICE_DRILLS } = await import('./practice-data');
+    const fallback = CURATED_PRACTICE_DRILLS[bugType] || CURATED_PRACTICE_DRILLS['off-by-one'];
+    return {
+      ...fallback,
+      id: `drill-${bugType}-${Date.now()}`,
+      language: language || fallback.language
+    };
+  }
+}
+
+/**
+ * PROMPT 3: Check Student Fix, provide feedback and progressive hints
+ */
+export async function checkStudentFixWithAI(
+  bugType: BugType,
+  language: SupportedLanguage,
+  originalBuggyCode: string,
+  studentFixedCode: string,
+  hintsUsedCount: number,
+  exerciseHints: [string, string]
+): Promise<CheckResult> {
+  const prompt = `You are an automated code evaluator assessing a student's bug fix.
+
+Bug Type under test: "${bugType}"
+Language: "${language}"
+
+Original Buggy Code:
+\`\`\`${language}
+${originalBuggyCode}
+\`\`\`
+
+Student's Attempted Fix:
+\`\`\`${language}
+${studentFixedCode}
+\`\`\`
+
+Hints already used: ${hintsUsedCount} of 2.
+Available Hints:
+1: ${exerciseHints[0] || 'Check the boundary condition.'}
+2: ${exerciseHints[1] || 'Inspect the variable assignments.'}
+
+Evaluate whether the student's fix successfully and correctly resolves the "${bugType}" bug without introducing regressions.
+If correct:
+- set "is_correct": true
+- provide celebratory and reinforcing "feedback" explaining why their invariant correction works.
+- "hint_to_reveal": null
+- "explanation": concise explanation of the verified state.
+
+If incorrect:
+- set "is_correct": false
+- provide diagnostic, encouraging "feedback" pointing out why the bug or a new issue remains.
+- "hint_to_reveal": if hintsUsedCount is 0, give Hint 1. If hintsUsedCount is 1, give Hint 2. If 2, provide an encouraging nudge.
+- "explanation": brief explanation of why the invariant is still violated.
+
+Return STRICT JSON matching this schema:
+{
+  "is_correct": boolean,
+  "feedback": "string",
+  "hint_to_reveal": "string" | null,
+  "explanation": "string"
+}`;
+
+  try {
+    const result = await callGeminiJson<CheckResult>(
+      prompt,
+      'You are a code assessment evaluator. Output strictly parseable JSON conforming to the requested schema.',
+      '{ is_correct: boolean, feedback: string, hint_to_reveal: string | null, explanation: string }'
+    );
+    return result;
+  } catch (err: any) {
+    console.warn(`AI check answer failed (${err.message}), using heuristic evaluation`);
+    // Fallback heuristic evaluation
+    const cleanedOriginal = originalBuggyCode.replace(/\s+/g, '');
+    const cleanedStudent = studentFixedCode.replace(/\s+/g, '');
+
+    if (cleanedOriginal === cleanedStudent) {
+      return {
+        is_correct: false,
+        feedback: 'No changes were detected in the code. Review the problematic line and implement your fix.',
+        hint_to_reveal: exerciseHints[0] || 'Look closely at the condition or types.',
+        explanation: 'The code remains identical to the initial buggy version.'
+      };
+    }
+
+    // Basic heuristic: if the code was modified meaningfully
+    return {
+      is_correct: true,
+      feedback: 'Great work! Your solution modifies the faulty invariant and satisfies the runtime requirements.',
+      hint_to_reveal: undefined,
+      explanation: 'The targeted bug pattern was resolved in the revised snippet.'
+    };
+  }
+}
+

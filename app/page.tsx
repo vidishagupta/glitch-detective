@@ -1,14 +1,16 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Hero from '@/components/Hero';
 import CodeInputSection from '@/components/CodeInputSection';
 import InvestigatingLoader from '@/components/InvestigatingLoader';
 import BugAutopsy from '@/components/BugAutopsy';
+import PracticeMode from '@/components/PracticeMode';
 import AiArchitectureModal from '@/components/AiArchitectureModal';
-import { BugAnalysis, SupportedLanguage } from '@/lib/types';
+import { BugAnalysis, BugType, SupportedLanguage } from '@/lib/types';
 import { DEMO_BUGS } from '@/lib/demo-data';
+import { seedDemoStatsIfEmpty } from '@/lib/storage';
 import { AlertCircle, Sparkles, Terminal } from 'lucide-react';
 
 export default function Home() {
@@ -20,6 +22,11 @@ export default function Home() {
   const [analysis, setAnalysis] = useState<BugAnalysis | null>(null);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [practiceBugType, setPracticeBugType] = useState<BugType>('off-by-one');
+
+  useEffect(() => {
+    seedDemoStatsIfEmpty();
+  }, []);
 
   // Load a demo bug by ID
   const handleSelectDemoBugById = (id: string) => {
@@ -128,31 +135,22 @@ export default function Home() {
                   analysis={analysis}
                   originalCode={code}
                   language={language}
-                  onGoToPractice={() => setActiveTab('practice')}
+                  onGoToPractice={() => {
+                    setPracticeBugType(analysis.bug_type);
+                    setActiveTab('practice');
+                  }}
                 />
               )}
             </div>
           )}
 
-          {/* Practice Tab Placeholder (Prepared for Phase 2) */}
+          {/* Practice Tab (Phase 2) */}
           {activeTab === 'practice' && (
-            <div className="p-12 text-center rounded-2xl border border-slate-800 bg-[#0a0f1d] space-y-4">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-amber-950 border border-amber-500/40 text-amber-400">
-                <Sparkles className="w-7 h-7" />
-              </div>
-              <h3 className="text-xl font-bold text-white font-mono">
-                Practice Mode Engine Ready
-              </h3>
-              <p className="text-sm text-slate-400 max-w-lg mx-auto">
-                Phase 1 complete! Click &quot;Bug Autopsy&quot; to test the analysis engine, or proceed to Phase 2 to unlock adaptive dynamic drills and the AI hint oracle.
-              </p>
-              <button
-                onClick={() => setActiveTab('autopsy')}
-                className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-mono transition-all"
-              >
-                Return to Autopsy View
-              </button>
-            </div>
+            <PracticeMode
+              initialBugType={practiceBugType}
+              initialLanguage={language}
+              onGoToDashboard={() => setActiveTab('dashboard')}
+            />
           )}
 
           {/* Dashboard Tab Placeholder (Prepared for Phase 3) */}
