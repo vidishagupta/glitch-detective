@@ -7,6 +7,7 @@
 [![React](https://img.shields.io/badge/React-19-61dafb?logo=react)](https://react.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4-38bdf8?logo=tailwind-css)](https://tailwindcss.com/)
 [![Google Gemini](https://img.shields.io/badge/Google_Gemini-2.5_Flash-4285F4?logo=google)](https://ai.google.dev/)
+[![YouTube Demo](https://img.shields.io/badge/YouTube-Demo_Video-FF0000?logo=youtube&logoColor=white)](https://youtu.be/s81QLvvb3HU)
 [![Hackathon](https://img.shields.io/badge/GLITCHATHON-Build_with_AI-00f2fe)](https://github.com)
 
 ---
@@ -132,10 +133,11 @@ npm run start
 
 ## 🌐 Live Deployment & Demo
 
+- **Official Demo Video (YouTube)**: [https://youtu.be/s81QLvvb3HU](https://youtu.be/s81QLvvb3HU) (2m 40s Full HD with burned-in subtitles)
 - **Live Application URL**: [https://glitch-detective.vercel.app](https://glitch-detective.vercel.app)
 - **Deployment Status**: Active on Vercel Edge Serverless
-- **Full Demo Video (2:40, 1080p Subtitled)**: [glitch-detective-demo-full.mp4](./glitch-detective-demo-full.mp4) (Direct Stream: [https://glitch-detective.vercel.app/demo.mp4](https://glitch-detective.vercel.app/demo.mp4))
-- **Short Teaser Video (0:29, 1080p Subtitled)**: [glitch-detective-demo-short.mp4](./glitch-detective-demo-short.mp4)
+- **Direct Video Stream**: [https://glitch-detective.vercel.app/demo.mp4](https://glitch-detective.vercel.app/demo.mp4)
+- **Short Teaser Cut (0:29)**: [glitch-detective-demo-short.mp4](./glitch-detective-demo-short.mp4)
 
 ### How to Deploy Your Own on Vercel
 1. Go to [vercel.com](https://vercel.com/) and click **"Add New Project"** &gt; **"Import"**.
