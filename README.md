@@ -130,10 +130,19 @@ npm run start
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Deployment & Demo
 
-- **Live URL**: [https://glitch-detective.vercel.app](https://glitch-detective.vercel.app) *(Deploy step detailed in Phase 6)*
+- **Live URL**: [https://glitch-detective.vercel.app](https://glitch-detective.vercel.app)
+- **Deployment Status**: Active on Vercel Edge Serverless
 - **Demo Video**: 3-minute automated walkthrough featuring AI narration and UI forensics.
+
+### How to Deploy Your Own on Vercel
+1. Go to [vercel.com](https://vercel.com/) and click **"Add New Project"** &gt; **"Import"**.
+2. Select the repository: **`vidishagupta/glitch-detective`**.
+3. Under **Environment Variables**, add:
+   - Key: `GEMINI_API_KEY`
+   - Value: `your_gemini_api_key` (get one free at [aistudio.google.com](https://aistudio.google.com/))
+4. Click **"Deploy"**. Vercel will automatically build the Next.js App Router application.
 
 ---
 
