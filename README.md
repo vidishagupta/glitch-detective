@@ -132,9 +132,10 @@ npm run start
 
 ## 🌐 Live Deployment & Demo
 
-- **Live URL**: [https://glitch-detective.vercel.app](https://glitch-detective.vercel.app)
+- **Live Application URL**: [https://glitch-detective.vercel.app](https://glitch-detective.vercel.app)
 - **Deployment Status**: Active on Vercel Edge Serverless
-- **Demo Video**: 3-minute automated walkthrough featuring AI narration and UI forensics.
+- **Full Demo Video (2:40, 1080p Subtitled)**: [glitch-detective-demo-full.mp4](./glitch-detective-demo-full.mp4) (Direct Stream: [https://glitch-detective.vercel.app/demo.mp4](https://glitch-detective.vercel.app/demo.mp4))
+- **Short Teaser Video (0:29, 1080p Subtitled)**: [glitch-detective-demo-short.mp4](./glitch-detective-demo-short.mp4)
 
 ### How to Deploy Your Own on Vercel
 1. Go to [vercel.com](https://vercel.com/) and click **"Add New Project"** &gt; **"Import"**.
