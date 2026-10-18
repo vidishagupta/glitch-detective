@@ -122,6 +122,7 @@ export default function AiArchitectureModal({ isOpen, onClose }: AiArchitectureM
         {/* Footer */}
         <div className="border-t border-slate-800 pt-4 flex justify-end">
           <button
+            data-testid="btn-ack-close-ai-modal"
             onClick={onClose}
             className="px-4 py-2 rounded-xl bg-cyan-500 text-slate-950 font-mono text-xs font-bold hover:bg-cyan-400 transition-all cursor-pointer"
           >

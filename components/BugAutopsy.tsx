@@ -92,7 +92,7 @@ export default function BugAutopsy({
       {/* Two Column Diagnosis Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {/* Plain English Card */}
-        <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
+        <div data-testid="card-plain-english" className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 flex flex-col justify-between">
           <div>
             <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono font-bold uppercase mb-2">
               <Search className="w-4 h-4" />
@@ -109,7 +109,7 @@ export default function BugAutopsy({
         </div>
 
         {/* Root Cause Card */}
-        <div className="p-5 rounded-2xl bg-[#0f172a]/90 border border-cyan-500/30 flex flex-col justify-between shadow-[0_0_20px_rgba(0,242,254,0.06)]">
+        <div data-testid="card-root-cause" className="p-5 rounded-2xl bg-[#0f172a]/90 border border-cyan-500/30 flex flex-col justify-between shadow-[0_0_20px_rgba(0,242,254,0.06)]">
           <div>
             <div className="flex items-center gap-2 text-amber-400 text-xs font-mono font-bold uppercase mb-2">
               <Flame className="w-4 h-4" />
@@ -231,7 +231,7 @@ export default function BugAutopsy({
       </div>
 
       {/* Step-by-Step Walkthrough */}
-      <div className="p-5 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-3">
+      <div data-testid="card-walkthrough" className="p-5 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-3">
         <div className="flex items-center gap-2 text-xs font-mono font-bold text-slate-300 uppercase">
           <FileCode className="w-4 h-4 text-cyan-400" />
           <span>Step-by-Step Execution Walkthrough</span>
@@ -256,7 +256,7 @@ export default function BugAutopsy({
 
       {/* Prevention Tip Callout */}
       {analysis.prevention_tip && (
-        <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-start gap-3">
+        <div data-testid="card-prevention-tip" className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 flex items-start gap-3">
           <Lightbulb className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
           <div>
             <h4 className="text-xs font-mono font-bold text-emerald-400 uppercase">

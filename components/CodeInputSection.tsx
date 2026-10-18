@@ -102,13 +102,29 @@ export default function CodeInputSection({
           <button
             data-testid="btn-clear"
             onClick={handleClear}
-            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition-all"
+            className="flex items-center gap-1 px-2.5 py-1.5 text-xs font-mono text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition-all cursor-pointer"
             title="Clear Inputs"
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span className="hidden sm:inline">Clear</span>
           </button>
         </div>
+      </div>
+
+      {/* 1-Click Quick Demo Bug Pills for Instant Hackathon Testing */}
+      <div className="flex flex-wrap items-center gap-2 px-1">
+        <span className="text-[11px] font-mono text-slate-400">1-Click Demo Bugs:</span>
+        {DEMO_BUGS.map((demo) => (
+          <button
+            key={demo.id}
+            data-testid={`btn-quick-demo-${demo.id}`}
+            onClick={() => onSelectDemoBugById(demo.id)}
+            className="px-2.5 py-1 text-xs font-mono rounded-lg bg-slate-900 hover:bg-cyan-950/80 border border-slate-800 hover:border-cyan-500/50 text-slate-300 hover:text-cyan-300 transition-all flex items-center gap-1.5 cursor-pointer shadow-sm"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span>{demo.title.split(':')[0]}: {demo.bugType}</span>
+          </button>
+        ))}
       </div>
 
       {/* Editor & Error Input Grid */}
