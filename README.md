@@ -96,7 +96,7 @@ Glitch Detective implements a visible, multi-stage AI pipeline designed for dete
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/glitch-detective.git
+git clone https://github.com/vidishagupta/glitch-detective.git
 cd glitch-detective
 ```
 
